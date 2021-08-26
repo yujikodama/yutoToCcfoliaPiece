@@ -221,7 +221,7 @@ othersPackage=(skill,mainData) =>  {
         case 'lvRan' :
           rtnArr.push(`2d+{${skillList[skill].name}}+{器用度} 【レンジャー技巧判定】応急手当/隠蔽/解除*/罠設置* (*は自然環境のみ)`);
           rtnArr.push(`2d+{${skillList[skill].name}}+{敏捷度} 【レンジャー運動判定】受け身/隠密/軽業/登攀/尾行`);
-          rtnArr.push(`2d+{${skillList[skill].name}}+{敏捷度} 【レンジャー観察判定】病気知識/薬品学/足跡追跡/異常感知*/聞き耳/危険感知/探索*/天候予測/罠回避*/地図作製* (*は自然環境のみ)`);
+          rtnArr.push(`2d+{${skillList[skill].name}}+{知力} 【レンジャー観察判定】病気知識/薬品学/足跡追跡/異常感知*/聞き耳/危険感知/探索*/天候予測/罠回避*/地図作製* (*は自然環境のみ)`);
           rtnArr.push(`k10+{${skillList[skill].name}}+{器用度}@13 【薬草／威力10(救命草)】`);
           rtnArr.push(`k0+{${skillList[skill].name}}+{器用度}@13 【薬草／威力0(魔香草)】`);
           rtnArr.push(`k20+{${skillList[skill].name}}+{知力}@13 【ポーション／威力20(ヒーリングポーション】`);
