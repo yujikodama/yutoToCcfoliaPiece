@@ -124,6 +124,7 @@ function createCharacter() {
         {label:"精神",value:yutoData.bonusMnd},
         {label:"生命抵抗",value:yutoData.vitResistTotal},
         {label:"精神抵抗",value:yutoData.mndResistTotal},
+        {label:"回避",value:yutoData.defenseTotal1Eva},
       ],
       memo:`種族:${yutoData.race==undefined?'':yutoData.race}
 プレイヤー:${yutoData.playerName==undefined?'':yutoData.playerName}
@@ -160,7 +161,7 @@ function createChatPalette(argData=""){
     ':1ゾロ+1'
   ];
   if(Number(yutoData.defenseTotal1Eva)!==0){
-    commandsList.push(`2d+${yutoData.defenseTotal1Eva} 【回避力判定】`)
+    commandsList.push(`2d+{回避} 【回避力判定】`)
   }
   for(const key in skillList) {
     if (key in yutoData){
