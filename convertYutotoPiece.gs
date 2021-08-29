@@ -106,6 +106,7 @@ function createCharacter() {
   sheet.getRange("B2").setValue("");
   sheet.getRange("B3").setValue("");
   let yutoData=getYutoData();
+  console.log(JSON.stringify(yutoData))
   //ccfoliaAPI(https://docs.ccfolia.com/developer-api/clipboard-api)
   let ccfoliaAPICharacter={
     kind:"character",
@@ -197,7 +198,7 @@ physicsDamageAndhit = (skill,mainData) =>  {
   if ('weaponNum' in mainData) {
     for(var i=1;i<=mainData.weaponNum;i++){
       if(mainData[`weapon${i}Class`]===skillList[skill].name){
-        rtnArr.push(`2d+{${skillList[skill].name}}+{${skillList[skill].hitAbility}} 【命中力判定/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`);
+        rtnArr.push(`2d+{${skillList[skill].name}}+{${skillList[skill].hitAbility}}+${mainData[`weapon${i}Acc`]} 【命中力判定/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`);
         //ガン以外        
         if(mainData[`weapon${i}Category`]!=='ガン'){
           //フェンサーの場合はC値-1しておく
