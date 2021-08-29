@@ -102,6 +102,9 @@ const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 const sheet=spreadsheet.getSheetByName('convertPiece'); 
 //キャラ作成
 function createCharacter() { 
+  //既存のセルを初期化
+  sheet.getRange("B2").setValue("");
+  sheet.getRange("B3").setValue("");
   let yutoData=getYutoData();
   //ccfoliaAPI(https://docs.ccfolia.com/developer-api/clipboard-api)
   let ccfoliaAPICharacter={
@@ -149,6 +152,8 @@ function createCharacter() {
 
 //チャパレ作成
 function createChatPalette(argData=""){
+  //既存のセルを初期化
+  sheet.getRange("B3").setValue("");
   let yutoData=argData=="" ? getYutoData() : argData;
 
   //コマンドパレット格納配列
