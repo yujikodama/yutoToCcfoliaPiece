@@ -118,6 +118,8 @@ function createCharacter() {
         {label:"MP",value:yutoData.mpTotal,max:yutoData.mpTotal},
         {label:"防護点",value:yutoData.defenseTotalAllDef,max:yutoData.defenseTotalAllDef},
         {label:"1ゾロ",value:0,max:0},
+        {label:"生命抵抗",value:yutoData.vitResistTotal,max:yutoData.vitResistTotal},
+        {label:"精神抵抗",value:yutoData.mndResistTotal,max:yutoData.mndResistTotal},
       ],
       params:[
         {label:"器用度",value:yutoData.bonusDex},
@@ -126,8 +128,6 @@ function createCharacter() {
         {label:"生命",value:yutoData.bonusVit},
         {label:"知力",value:yutoData.bonusInt},
         {label:"精神",value:yutoData.bonusMnd},
-        {label:"生命抵抗",value:yutoData.vitResistTotal},
-        {label:"精神抵抗",value:yutoData.mndResistTotal},
         {label:"回避",value:yutoData.defenseTotal1Eva},
       ],
       memo:`種族:${yutoData.race==undefined?'':yutoData.race}
