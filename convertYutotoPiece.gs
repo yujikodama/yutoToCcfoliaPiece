@@ -125,13 +125,17 @@ function createCharacter() {
         {label:"生命抵抗",value:yutoData.vitResistTotal},
         {label:"精神抵抗",value:yutoData.mndResistTotal},
       ],
-      memo:`種族:${yutoData.race}
-プレイヤー:${yutoData.playerName}`,
+      memo:`種族:${yutoData.race==undefined?'':yutoData.race}
+プレイヤー:${yutoData.playerName==undefined?'':yutoData.playerName}
+性別:${yutoData.gender==undefined?'':yutoData.gender}
+年齢:${yutoData.age==undefined?'':yutoData.age}
+生まれ:${yutoData.birth==undefined?'':yutoData.birth}
+信仰:${yutoData.faith==undefined?'':yutoData.faith}`,
       commands:"",
       initiative:Number(yutoData.mobilityTotal),
     },
   };
-
+  
   //技能のラベルを生成する
   for(const key in skillList) {
     if (key in yutoData) ccfoliaAPICharacter.data.params.push({label:skillList[key].name,value:yutoData[key]})
@@ -148,8 +152,12 @@ function createChatPalette(argData=""){
 
   //コマンドパレット格納配列
   let commandsList=[
-    `2d+{生命抵抗}`,
-    `2d+{精神抵抗}`,
+    '2d 【平目】',
+    `2d+{生命抵抗} 【生命抵抗判定】`,
+    `2d+{精神抵抗} 【精神抵抗判定】`,
+    ':HP',
+    ':MP',
+    ':1ゾロ+1'
   ];
   if(Number(yutoData.defenseTotal1Eva)!==0){
     commandsList.push(`2d+${yutoData.defenseTotal1Eva} 【回避力判定】`)
@@ -184,9 +192,11 @@ physicsDamageAndhit = (skill,mainData) =>  {
     for(var i=1;i<=mainData.weaponNum;i++){
       if(mainData[`weapon${i}Class`]===skillList[skill].name){
         rtnArr.push(`2d+{${skillList[skill].name}}+{${skillList[skill].hitAbility}} 【命中力判定/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`);
-        //ガン以外
+        //ガン以外        
         if(mainData[`weapon${i}Category`]!=='ガン'){
-          rtnArr.push(`k${mainData[`weapon${i}Rate`]}+{${skillList[skill].name}}+{${skillList[skill].damageAbility}}@${mainData[`weapon${i}Crit`]} 【威力${mainData[`weapon${i}Rate`]}/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`)
+          //フェンサーの場合はC値-1しておく
+          crit= skill=='lvFen'?String(Number(mainData[`weapon${i}Crit`])-1):mainData[`weapon${i}Crit`]
+          rtnArr.push(`k${mainData[`weapon${i}Rate`]}+{${skillList[skill].name}}+{${skillList[skill].damageAbility}}@${crit} 【威力${mainData[`weapon${i}Rate`]}/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`)
         //ガンの場合
         }else{
           //マギテック技能有
