@@ -106,7 +106,6 @@ function createCharacter() {
   sheet.getRange("B2").setValue("");
   sheet.getRange("B3").setValue("");
   let yutoData=getYutoData();
-  console.log(JSON.stringify(yutoData))
   //ccfoliaAPI(https://docs.ccfolia.com/developer-api/clipboard-api)
   let ccfoliaAPICharacter={
     kind:"character",
@@ -145,6 +144,11 @@ function createCharacter() {
   for(const key in skillList) {
     if (key in yutoData) ccfoliaAPICharacter.data.params.push({label:skillList[key].name,value:yutoData[key]})
   }
+  //補正用のラベルを別途追加(ステータスに移行する場合一番下にあった方が良いデータ)
+  ccfoliaAPICharacter.data.params.push({label:"回避補正",value:'0'});
+  ccfoliaAPICharacter.data.params.push({label:"命中補正",value:'0'});
+  ccfoliaAPICharacter.data.params.push({label:"威力補正",value:'0'});
+  
   //チャットパレット出力
   ccfoliaAPICharacter.data.commands=createChatPalette(yutoData).flat().join('\n')
 
@@ -167,7 +171,7 @@ function createChatPalette(argData=""){
     ':1ゾロ+1'
   ];
   if(Number(yutoData.defenseTotal1Eva)!==0){
-    commandsList.push(`2d+{回避} 【回避力判定】`)
+    commandsList.push(`2d+{回避}+{回避補正} 【回避力判定】`)
   }
   for(const key in skillList) {
     if (key in yutoData){
@@ -190,6 +194,7 @@ getYutoData=()=>{
   if(response.result.match(/リクエストされたシートは見つかりませんでした/)){
     throw response.result
   }
+  // console.log(JSON.stringify(response))
   return response;
 }
 
@@ -198,17 +203,36 @@ physicsDamageAndhit = (skill,mainData) =>  {
   if ('weaponNum' in mainData) {
     for(var i=1;i<=mainData.weaponNum;i++){
       if(mainData[`weapon${i}Class`]===skillList[skill].name){
-        rtnArr.push(`2d+{${skillList[skill].name}}+{${skillList[skill].hitAbility}}+${mainData[`weapon${i}Acc`]} 【命中力判定/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`);
+        //参照する値でundefind(未入力)の場合変換する
+        let weaponData={
+          //命中力
+          Acc:mainData[`weapon${i}Acc`]==undefined?0:mainData[`weapon${i}Acc`],
+          //用法
+          Usage:mainData[`weapon${i}Usage`]==undefined?'':mainData[`weapon${i}Usage`],
+          //名前
+          Name:mainData[`weapon${i}Name`]==undefined?'':mainData[`weapon${i}Name`],
+          //カテゴリ
+          Category:mainData[`weapon${i}Category`]==undefined?'':mainData[`weapon${i}Category`],
+          //C値
+          Crit:mainData[`weapon${i}Crit`]==undefined?13:mainData[`weapon${i}Crit`],
+          //威力
+          Rate:mainData[`weapon${i}Rate`]==undefined?0:mainData[`weapon${i}Rate`],
+          //追加ダメージ
+          Dmg:mainData[`weapon${i}Dmg`]==undefined?0:mainData[`weapon${i}Dmg`],
+        }
+
+        //命中判定
+        rtnArr.push(`2d+{${skillList[skill].name}}+{${skillList[skill].hitAbility}}+{命中補正}+${weaponData.Acc} 【命中力判定/${weaponData.Usage}(${weaponData.Name})】`);
         //ガン以外        
-        if(mainData[`weapon${i}Category`]!=='ガン'){
+        if(weaponData.Category!=='ガン'){
           //フェンサーの場合はC値-1しておく
-          crit= skill=='lvFen'?String(Number(mainData[`weapon${i}Crit`])-1):mainData[`weapon${i}Crit`]
-          rtnArr.push(`k${mainData[`weapon${i}Rate`]}+{${skillList[skill].name}}+{${skillList[skill].damageAbility}}@${crit} 【威力${mainData[`weapon${i}Rate`]}/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`)
+          crit= skill=='lvFen'?String(Number(weaponData.Crit)-1):weaponData.Crit
+          rtnArr.push(`k${weaponData.Rate}+{${skillList[skill].name}}+{${skillList[skill].damageAbility}}+{威力補正}+${weaponData.Dmg}@${crit} 【威力${weaponData.Rate}/${weaponData.Usage}(${weaponData.Name})】`)
         //ガンの場合
         }else{
           //マギテック技能有
           if('lvMag' in mainData){
-            rtnArr.push(`k${mainData[`weapon${i}Rate`]}+{マギテック}+{知力}@${mainData[`weapon${i}Crit`]} 【威力${mainData[`weapon${i}Rate`]}/${mainData[`weapon${i}Usage`]}(${mainData[`weapon${i}Name`]})】`)
+            rtnArr.push(`k${weaponData.Rate}+{マギテック}+{知力}+{威力補正}@10 【威力${weaponData.Rate}/${weaponData.Usage}(${weaponData.Name})】`)
           }
         }
       }
