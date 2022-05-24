@@ -55,6 +55,18 @@ const skillList={
     hitAbility:'知力',
     chatPaletteType:[`magic`],
   },
+  lvDru:{
+    name:'ドルイド',
+    damageAbility:'知力',
+    hitAbility:'知力',
+    chatPaletteType:[`druid`],
+  },
+  lvDem:{
+    name:'デーモンルーラー',
+    damageAbility:'知力',
+    hitAbility:'知力',
+    chatPaletteType:[`magic`],
+  },
   lvSco:{
     name:'スカウト',
     damageAbility:'',
@@ -93,6 +105,18 @@ const skillList={
   },
   lvAlc:{
     name:'アルケミスト',
+    damageAbility:'',
+    hitAbility:'',
+    chatPaletteType:`other`,
+  },
+  lvGeo:{
+    name:'ジオマンサー',
+    damageAbility:'',
+    hitAbility:'',
+    chatPaletteType:`other`,
+  },
+  lvWar:{
+    name:'ウォーリーダー',
     damageAbility:'',
     hitAbility:'',
     chatPaletteType:`other`,
@@ -178,6 +202,7 @@ function createChatPalette(argData=""){
       if(skillList[key].chatPaletteType.includes('other')) commandsList.push(othersPackage(key,yutoData));
       if(skillList[key].chatPaletteType.includes('physics')) commandsList.push(physicsDamageAndhit(key,yutoData));
       if(skillList[key].chatPaletteType.includes('magic')) commandsList.push(magicDamageAndhit(key,yutoData));
+      if(skillList[key].chatPaletteType.includes('druid')) commandsList.push(druidDamageAndhit(key,yutoData));
       
     } 
   }
@@ -249,6 +274,15 @@ magicDamageAndhit = (skill,mainData) =>  {
   return rtnArr;
 }
 
+druidDamageAndhit = (skill,mainData) =>  {
+  let rtnArr=[];
+  rtnArr.push(`2d+{${skillList[skill].name}}+{${skillList[skill].hitAbility}} 【${skillList[skill].name}行使判定】`);
+  rtnArr.push(`k10+{${skillList[skill].name}}+{${skillList[skill].damageAbility}}@10 【${skillList[skill].name}威力判定/威力10】`)
+  rtnArr.push(`k10+{${skillList[skill].name}}+{${skillList[skill].damageAbility}}@13 【${skillList[skill].name}回復判定/威力10】`)
+  rtnArr.push(`Dru[0,3,6]+{${skillList[skill].name}}+{${skillList[skill].damageAbility}} 【${skillList[skill].name}物理威力判定】`)
+  return rtnArr;
+}
+
 othersPackage=(skill,mainData) =>  {
   let rtnArr=[];
       switch (skill){
@@ -287,6 +321,9 @@ othersPackage=(skill,mainData) =>  {
         case 'lvBar' :
           rtnArr.push(`2d+{${skillList[skill].name}}+{知力} 【バード知識判定】見識`);
           break;
+        //ウォーリーダー
+        case 'lvWar' :
+          rtnArr.push(`2d+{${skillList[skill].name}}+{知力}+1 【先制判定*】 (*要【軍師の知略】)`);
         default:
       }
   return rtnArr;
