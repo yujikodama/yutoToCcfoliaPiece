@@ -123,7 +123,7 @@ const skillList={
   },
 };
 const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-const sheet=spreadsheet.getSheetByName('convertPiece'); 
+const sheet=spreadsheet.getSheetByName('convertCharacter'); 
 //キャラ作成
 function createCharacter() { 
   //既存のセルを初期化
