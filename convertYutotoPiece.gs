@@ -10,8 +10,13 @@ const skillList={
     name:'グラップラー',
     damageAbility:'筋力',
     hitAbility:'器用度',
-    chatPaletteType:[`physics`],    
-
+    chatPaletteType:[`physics`],
+  },
+  lvBat:{
+    name:'バトルダンサー',
+    damageAbility:'筋力',
+    hitAbility:'器用度',
+    chatPaletteType:[`physics`],
   },
   lvFen:{
     name:'フェンサー',
