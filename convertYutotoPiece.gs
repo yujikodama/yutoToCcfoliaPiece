@@ -329,7 +329,13 @@ othersPackage=(skill,mainData) =>  {
           break;
         //ウォーリーダー
         case 'lvWar' :
+          rtnArr.push(`2d+{${skillList[skill].name}}+{敏捷度} 【先制判定】`);
           rtnArr.push(`2d+{${skillList[skill].name}}+{知力}+1 【先制判定*】 (*要【軍師の知略】)`);
+          break;
+        //ジオマンサー
+        case 'lvGeo' :
+          rtnArr.push(`2d+{${skillList[skill].name}}+{知力} 【ジオマンサー観察判定】探索/天候予測`);
+          break;
         default:
       }
   return rtnArr;
