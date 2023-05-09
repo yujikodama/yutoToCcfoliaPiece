@@ -199,9 +199,12 @@ function createChatPalette(argData=""){
     ':MP',
     ':1ゾロ+1'
   ];
-  if(Number(yutoData.defenseTotal1Eva)!==0){
-    commandsList.push(`2d+{回避}+{回避補正} 【回避力判定】`)
+
+  //回避技能の設定があれば回避コマンド作成
+  if(yutoData.evasionClass!==undefined){
+    commandsList.push(`2d+{${yutoData.evasionClass}}+{敏捷度}+{回避補正} 【回避力判定】`)
   }
+
   for(const key in skillList) {
     if (key in yutoData){
       if(skillList[key].chatPaletteType.includes('other')) commandsList.push(othersPackage(key,yutoData));
