@@ -156,7 +156,6 @@ function createCharacter() {
         {label:"生命",value:yutoData.bonusVit},
         {label:"知力",value:yutoData.bonusInt},
         {label:"精神",value:yutoData.bonusMnd},
-        {label:"回避",value:yutoData.defenseTotal1Eva},
       ],
       memo:`種族:${yutoData.race==undefined?'':yutoData.race}
 プレイヤー:${yutoData.playerName==undefined?'':yutoData.playerName}
