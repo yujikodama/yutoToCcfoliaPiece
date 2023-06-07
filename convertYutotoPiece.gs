@@ -132,8 +132,8 @@ const sheet=spreadsheet.getSheetByName('convertCharacter');
 //キャラ作成
 function createCharacter() { 
   //既存のセルを初期化
-  sheet.getRange("B2").setValue("");
-  sheet.getRange("B3").setValue("");
+  sheet.getRange("B4").setValue("");
+  sheet.getRange("B5").setValue("");
   let yutoData=getYutoData();
   //ccfoliaAPI(https://docs.ccfolia.com/developer-api/clipboard-api)
   let ccfoliaAPICharacter={
@@ -180,13 +180,13 @@ function createCharacter() {
   //チャットパレット出力
   ccfoliaAPICharacter.data.commands=createChatPalette(yutoData).flat().join('\n')
 
-  sheet.getRange("B2").setValue(JSON.stringify(ccfoliaAPICharacter));
+  sheet.getRange("B4").setValue(JSON.stringify(ccfoliaAPICharacter));
 }
 
 //チャパレ作成
 function createChatPalette(argData=""){
   //既存のセルを初期化
-  sheet.getRange("B3").setValue("");
+  sheet.getRange("B5").setValue("");
   let yutoData=argData=="" ? getYutoData() : argData;
 
   //コマンドパレット格納配列
@@ -213,18 +213,23 @@ function createChatPalette(argData=""){
       
     } 
   }
-  sheet.getRange("B3").setValue(commandsList.flat().join('\n'));
+  sheet.getRange("B5").setValue(commandsList.flat().join('\n'));
   return commandsList;
 }
 
 //ゆとしーとからデータ取得
 getYutoData=()=>{
   //ゆとしーとのURL+JSONAPI生成
-  let url=`${sheet.getRange("B1").getValue()}&mode=json`;
-  //API実行(https://yutorize.2-d.jp/?ytsheet2-json#keylist-sw2)
-  let response = JSON.parse(UrlFetchApp.fetch(url).getContentText());
-  if(response.result.match(/リクエストされたシートは見つかりませんでした/)){
-    throw response.result
+  let response
+  if(sheet.getRange("B3").getValue()===""){
+    let url=`${sheet.getRange("B1").getValue()}&mode=json`;
+    //API実行(https://yutorize.2-d.jp/?ytsheet2-json#keylist-sw2)
+    response = JSON.parse(UrlFetchApp.fetch(url).getContentText());
+    if(response.result.match(/リクエストされたシートは見つかりませんでした/)){
+      throw response.result
+    }
+  }else{
+    response=JSON.parse(sheet.getRange("B3").getValue());
   }
   // console.log(JSON.stringify(response))
   return response;
